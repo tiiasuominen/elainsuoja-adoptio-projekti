@@ -14,4 +14,12 @@ INSERT INTO animals (name, type, age, breed, description) VALUES
 ('Minttu',   'koira', 13, 'Sheltti', 'Uskollinen ja älykäs koira.'),
 ('Vikke', 'koira', 5, 'Plotti', 'Energinen metsästyskoira.');
 
-
+CREATE TABLE adoptions (
+  id             SERIAL PRIMARY KEY,
+  animal_id      INTEGER NOT NULL UNIQUE REFERENCES animals(id),
+  applicant_name VARCHAR(150) NOT NULL,
+  email          VARCHAR(150) NOT NULL,
+  phone          VARCHAR(50),
+  message        TEXT,
+  created_at     TIMESTAMP NOT NULL DEFAULT NOW()
+);

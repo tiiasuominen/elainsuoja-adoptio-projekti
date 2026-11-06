@@ -10,12 +10,24 @@ services:
     volumes:
       - ./db/init.sql:/docker-entrypoint-initdb.d/init.sql
 
+  server-b:
+    build: ./backend/server-b
+    environment:
+      DB_HOST: db
+      DB_PORT: 5432
+    ports:
+      - "3001:3001"
+    depends_on:
+      - db
+
   server-a:
     build: ./backend/server-a
     environment:
       DB_HOST: db
       DB_PORT: 5432
+      SERVER_B_URL: http://server-b:3001
     ports:
       - "3000:3000"
     depends_on:
       - db
+      - server-b
