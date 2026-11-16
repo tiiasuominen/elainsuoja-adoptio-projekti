@@ -23,6 +23,25 @@ app.get('/animals', async (req, res) => {
   }
 });
 
+// kuinka moni on löytänyt kodin
+app.get('/stats', async (req, res) => {
+  try {
+    const result = await pool.query(`
+      SELECT
+        COUNT(*)::int AS total,
+        COUNT(*) FILTER (WHERE status = 'available')::int AS available,
+        COUNT(*) FILTER (WHERE status = 'adopted')::int AS adopted,
+        COUNT(*) FILTER (WHERE status = 'available' AND type = 'kissa')::int AS cats_available,
+        COUNT(*) FILTER (WHERE status = 'available' AND type = 'koira')::int AS dogs_available
+      FROM animals
+    `);
+    res.json(result.rows[0]);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Tietokantavirhe' });
+  }
+});
+
 // Yksi eläin
 app.get('/animals/:id', async (req, res) => {
   try {

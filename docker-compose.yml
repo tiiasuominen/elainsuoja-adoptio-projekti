@@ -31,3 +31,10 @@ services:
     depends_on:
       - db
       - server-b
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "8080:80"
+    depends_on:
+      - server-a
